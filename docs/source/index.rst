@@ -70,6 +70,9 @@ the (La)TeX language like the following::
     \eject
     \bye
 
+The template for the single instance has to be called ``<modelname>_detail.tex`` and placed
+in a path in your filesystem where the Django's template system can find it.
+
 
 Report command
 ~~~~~~~~~~~~~~
