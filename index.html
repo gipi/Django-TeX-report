@@ -1,0 +1,169 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>Welcome to django-tex-report’s documentation! &mdash; django-tex-report v0.1 documentation</title>
+    <link rel="stylesheet" href="_static/default.css" type="text/css" />
+    <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '',
+        VERSION:     '0.1',
+        COLLAPSE_MODINDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="_static/jquery.js"></script>
+    <script type="text/javascript" src="_static/doctools.js"></script>
+    <link rel="top" title="django-tex-report v0.1 documentation" href="#" /> 
+  </head>
+  <body>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li><a href="#">django-tex-report v0.1 documentation</a> &raquo;</li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body">
+            
+  <div class="section" id="welcome-to-django-tex-report-s-documentation">
+<h1>Welcome to django-tex-report&#8217;s documentation!<a class="headerlink" href="#welcome-to-django-tex-report-s-documentation" title="Permalink to this headline">¶</a></h1>
+<p>We have a dream: make good reports without pain.</p>
+</div>
+<div class="section" id="preface">
+<h1>PREFACE<a class="headerlink" href="#preface" title="Permalink to this headline">¶</a></h1>
+<p>We all know the vey good library reportlab, but when we have to design the
+pdf structure we have to do it by try: cause our scientific background we
+prefer to use the TeX in order to make a good PDF.</p>
+<div class="section" id="example">
+<h2>Example<a class="headerlink" href="#example" title="Permalink to this headline">¶</a></h2>
+<p>Suppose you have a Django app (called <tt class="docutils literal"><span class="pre">recipe</span></tt>) with some models describing a recipe and its ingredients:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="k">class</span> <span class="nc">Ingredient</span><span class="p">(</span><span class="n">models</span><span class="o">.</span><span class="n">Model</span><span class="p">):</span>
+    <span class="n">name</span> <span class="o">=</span> <span class="n">models</span><span class="o">.</span><span class="n">CharField</span><span class="p">(</span><span class="n">max_length</span><span class="o">=</span><span class="mi">20</span><span class="p">)</span>
+
+    <span class="k">def</span> <span class="nf">__unicode__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">name</span>
+
+<span class="k">class</span> <span class="nc">IngredientToRecipe</span><span class="p">(</span><span class="n">models</span><span class="o">.</span><span class="n">Model</span><span class="p">):</span>
+    <span class="n">ingredient</span> <span class="o">=</span> <span class="n">models</span><span class="o">.</span><span class="n">ForeignKey</span><span class="p">(</span><span class="n">Ingredient</span><span class="p">)</span>
+    <span class="n">recipe</span> <span class="o">=</span> <span class="n">models</span><span class="o">.</span><span class="n">ForeignKey</span><span class="p">(</span><span class="s">&#39;Recipe&#39;</span><span class="p">)</span>
+    <span class="n">quantity</span> <span class="o">=</span> <span class="n">models</span><span class="o">.</span><span class="n">IntegerField</span><span class="p">()</span>
+
+<span class="k">class</span> <span class="nc">Recipe</span><span class="p">(</span><span class="n">models</span><span class="o">.</span><span class="n">Model</span><span class="p">):</span>
+    <span class="n">name</span> <span class="o">=</span> <span class="n">models</span><span class="o">.</span><span class="n">CharField</span><span class="p">(</span><span class="n">max_length</span><span class="o">=</span><span class="mi">50</span><span class="p">)</span>
+    <span class="n">time</span> <span class="o">=</span> <span class="n">models</span><span class="o">.</span><span class="n">IntegerField</span><span class="p">()</span>
+    <span class="n">portion</span> <span class="o">=</span> <span class="n">models</span><span class="o">.</span><span class="n">IntegerField</span><span class="p">(</span><span class="s">&#39;Porzioni&#39;</span><span class="p">,</span> <span class="n">help_text</span><span class="o">=</span><span class="s">&#39;numero di persone per cui  pensata la ricetta&#39;</span><span class="p">)</span>
+    <span class="n">description</span> <span class="o">=</span> <span class="n">models</span><span class="o">.</span><span class="n">TextField</span><span class="p">()</span>
+
+    <span class="n">ingredients</span> <span class="o">=</span> <span class="n">models</span><span class="o">.</span><span class="n">ManyToManyField</span><span class="p">(</span><span class="n">Ingredient</span><span class="p">,</span> <span class="n">through</span><span class="o">=</span><span class="n">IngredientToRecipe</span><span class="p">)</span>
+
+    <span class="k">def</span> <span class="nf">__unicode__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">name</span>
+</pre></div>
+</div>
+<p>and we want to be able to make different reports using the saved data:</p>
+<ul class="simple">
+<li>single recipe</li>
+<li>list of available recipes</li>
+</ul>
+<p>This can be done using the <tt class="docutils literal"><span class="pre">report</span></tt> command supplied by <tt class="docutils literal"><span class="pre">django-tex-report</span></tt>
+before we can create the reports, we need some template written using
+the (La)TeX language like the following:</p>
+<div class="highlight-python"><pre>\input eplain
+
+\line{\hfill {{ obj.name|title}}\hfill}
+\vskip 2cm
+
+\noindent\line{% templatetag openvariable %}\bf Durata:} {{obj.time}} minuti.\hfill}
+\unorderedlist
+{% for i2r in obj.ingredienttorecipe_set.all %}
+\li {{i2r.ingredient.name}} {{i2r.quantity}}
+{% endfor %}
+\endunorderedlist
+
+\noindent{\bf Preparazione: }{{obj.description|safe}}
+\vfill
+\line{\hrulefill}
+\eject
+\bye</pre>
+</div>
+<div class="section" id="report-command">
+<h3>Report command<a class="headerlink" href="#report-command" title="Permalink to this headline">¶</a></h3>
+<p>In order to use this command, insert the <tt class="docutils literal"><span class="pre">tex_report</span></tt> application to the <tt class="docutils literal"><span class="pre">INSTALLED_APPS</span></tt>
+and launch:</p>
+<div class="highlight-python"><pre>$ ./manage.py report recipe.recipe
+.....
+Successfully done</pre>
+</div>
+<p>(substitute <tt class="docutils literal"><span class="pre">recipe.recipe</span></tt> with your model).</p>
+<p>In the <tt class="docutils literal"><span class="pre">/tmp</span></tt> will be created a report for each instance of your data.</p>
+</div>
+</div>
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar">
+        <div class="sphinxsidebarwrapper">
+            <h3><a href="#">Table Of Contents</a></h3>
+            <ul>
+<li><a class="reference external" href="#">Welcome to django-tex-report&#8217;s documentation!</a></li>
+<li><a class="reference external" href="#preface">PREFACE</a><ul>
+<li><a class="reference external" href="#example">Example</a><ul>
+<li><a class="reference external" href="#report-command">Report command</a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+
+            <h3>This Page</h3>
+            <ul class="this-page-menu">
+              <li><a href="_sources/index.txt"
+                     rel="nofollow">Show Source</a></li>
+            </ul>
+          <div id="searchbox" style="display: none">
+            <h3>Quick search</h3>
+              <form class="search" action="search.html" method="get">
+                <input type="text" name="q" size="18" />
+                <input type="submit" value="Go" />
+                <input type="hidden" name="check_keywords" value="yes" />
+                <input type="hidden" name="area" value="default" />
+              </form>
+              <p class="searchtip" style="font-size: 90%">
+              Enter search terms or a module, class or function name.
+              </p>
+          </div>
+          <script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="General Index"
+             >index</a></li>
+        <li><a href="#">django-tex-report v0.1 documentation</a> &raquo;</li> 
+      </ul>
+    </div>
+    <div class="footer">
+      &copy; Copyright 2012, Gianluca Pacchiella.
+      Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 0.6.6.
+    </div>
+  </body>
+</html>
