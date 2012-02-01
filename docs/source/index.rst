@@ -3,6 +3,8 @@
    You can adapt this file completely to your liking, but it should at least
    contain the root `toctree` directive.
 
+.. module:: tex_report
+
 Welcome to django-tex-report's documentation!
 =============================================
 
@@ -14,6 +16,15 @@ PREFACE
 We all know the vey good library reportlab, but when we have to design the
 pdf structure we have to do it by try: cause our scientific background we
 prefer to use the TeX in order to make a good PDF.
+
+INSTALLATION
+============
+
+Make sure that you have installed TeX in your system
+
+In your ``settings.py`` put the following configuration::
+
+    TEX_REPORT_TMP_PATH = '/path/to/temporary/stuffs/'
 
 Example
 -------
@@ -87,5 +98,13 @@ and launch::
 (substitute ``recipe.recipe`` with your model).
 
 In the ``/tmp`` will be created a report for each instance of your data.
+
+Utilities
+~~~~~~~~~
+
+The core of the application is the following method:
+
+.. autofunction:: tex_report.utils.compile_report
+
 
 
