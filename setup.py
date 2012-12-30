@@ -12,5 +12,5 @@ setup(
         'tex_report.management',
         'tex_report.management.commands',
     ],
-    install_requires = ['setuptools'],
+    install_requires = ['setuptools', 'envoy',],
 )
